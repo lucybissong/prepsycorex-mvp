@@ -1,4 +1,4 @@
-import { prisma } from "../../lib/prisma";
+import prisma from "@/lib/prisma";
 
 export default async function AdminPage() {
   const submissions = await prisma.submission.findMany({
@@ -8,54 +8,66 @@ export default async function AdminPage() {
   });
 
   return (
-    <main className="min-h-screen bg-black text-white p-10">
-      <h1 className="text-4xl font-bold mb-8">
-        PrePsycorex Admin Dashboard
+    <main className="min-h-screen bg-[#050816] text-white p-10">
+      <h1 className="text-4xl font-bold mb-10">
+        Assessment Submissions
       </h1>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border border-gray-700">
-          <thead className="bg-gray-900">
-            <tr>
-              <th className="border border-gray-700 p-3 text-left">Name</th>
-              <th className="border border-gray-700 p-3 text-left">Email</th>
-              <th className="border border-gray-700 p-3 text-left">Phone</th>
-              <th className="border border-gray-700 p-3 text-left">Pathway</th>
-              <th className="border border-gray-700 p-3 text-left">Status</th>
-              <th className="border border-gray-700 p-3 text-left">Created</th>
-            </tr>
-          </thead>
+      <div className="space-y-6">
+        {submissions.map((submission) => (
+          <div
+            key={submission.id}
+            className="bg-[#111827] border border-gray-800 rounded-2xl p-6"
+          >
+            <div className="space-y-2 mb-4">
+              <p>
+                <strong>Name:</strong>{" "}
+                {submission.fullName}
+              </p>
 
-          <tbody>
-            {submissions.map((submission) => (
-              <tr key={submission.id}>
-                <td className="border border-gray-700 p-3">
-                  {submission.fullName}
-                </td>
+              <p>
+                <strong>Email:</strong>{" "}
+                {submission.email}
+              </p>
 
-                <td className="border border-gray-700 p-3">
-                  {submission.email}
-                </td>
+              <p>
+                <strong>Phone:</strong>{" "}
+                {submission.phone}
+              </p>
 
-                <td className="border border-gray-700 p-3">
-                  {submission.phone}
-                </td>
+              <p>
+                <strong>Pathway:</strong>{" "}
+                {submission.pathway}
+              </p>
 
-                <td className="border border-gray-700 p-3">
-                  {submission.pathway}
-                </td>
+              <p>
+                <strong>Status:</strong>{" "}
+                {submission.status}
+              </p>
 
-                <td className="border border-gray-700 p-3">
-                  {submission.status}
-                </td>
+              <p>
+                <strong>Submitted:</strong>{" "}
+                {new Date(
+                  submission.createdAt
+                ).toLocaleString()}
+              </p>
+            </div>
 
-                <td className="border border-gray-700 p-3">
-                  {new Date(submission.createdAt).toLocaleString()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            <div>
+              <h2 className="font-bold mb-3">
+                Responses
+              </h2>
+
+              <pre className="bg-black p-4 rounded-xl overflow-auto text-sm">
+                {JSON.stringify(
+                  submission.responses,
+                  null,
+                  2
+                )}
+              </pre>
+            </div>
+          </div>
+        ))}
       </div>
     </main>
   );
