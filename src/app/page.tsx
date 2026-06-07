@@ -45,10 +45,14 @@ export default function HomePage() {
               <p className="text-gray-400 mb-8">
                 {pathway.description}
               </p>
-
-              <button className="bg-white text-black px-5 py-3 rounded-xl font-medium">
-                Start Assessment
-              </button>
+<a
+  href={`/assessment/${pathway.title
+    .toLowerCase()
+    .replaceAll(" ", "-")}`}
+  className="inline-block bg-white text-black px-5 py-3 rounded-xl font-medium"
+>
+  Start Assessment
+</a>
             </div>
           ))}
         </div>
