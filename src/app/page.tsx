@@ -1,10 +1,15 @@
-```tsx id="jlwm9r"
+import React from "react";
+
 export default function HomePage() {
   return (
-    <main style={{ padding: "40px", fontFamily: "Arial" }}>
+    <main
+      style={{
+        padding: "40px",
+        fontFamily: "Arial",
+      }}
+    >
       <h1>PRE-PSYCOREX MVP</h1>
       <p>Deployment is working.</p>
     </main>
   );
 }
-```
