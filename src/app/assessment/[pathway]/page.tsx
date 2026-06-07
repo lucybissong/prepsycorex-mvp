@@ -90,7 +90,7 @@ export default function AssessmentPage() {
 
   if (success) {
     return (
-      <main className="min-h-screen p-10">
+      <main className="min-h-screen p-10 bg-[#050816] text-white">
         <h1 className="text-3xl font-bold mb-4">
           Assessment Submitted
         </h1>
@@ -103,25 +103,25 @@ export default function AssessmentPage() {
   }
 
   return (
-    <main className="min-h-screen p-10">
-      <div className="max-w-2xl mx-auto">
+    <main className="min-h-screen bg-[#050816] text-white px-6 py-20">
+      <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-8 capitalize">
           {pathway.replace(/-/g, " ")} Assessment
         </h1>
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6"
+          className="space-y-6 bg-[#111827] p-8 rounded-2xl border border-gray-800"
         >
           <div>
-            <label className="block mb-2 font-medium">
+            <label className="block mb-2 text-sm text-gray-300">
               Full Name
             </label>
 
             <input
               type="text"
               required
-              className="w-full border p-3 rounded"
+              className="w-full p-4 rounded-xl bg-black border border-gray-700"
               value={formData.fullName}
               onChange={(e) =>
                 setFormData({
@@ -133,14 +133,14 @@ export default function AssessmentPage() {
           </div>
 
           <div>
-            <label className="block mb-2 font-medium">
-              Email
+            <label className="block mb-2 text-sm text-gray-300">
+              Email Address
             </label>
 
             <input
               type="email"
               required
-              className="w-full border p-3 rounded"
+              className="w-full p-4 rounded-xl bg-black border border-gray-700"
               value={formData.email}
               onChange={(e) =>
                 setFormData({
@@ -152,14 +152,14 @@ export default function AssessmentPage() {
           </div>
 
           <div>
-            <label className="block mb-2 font-medium">
+            <label className="block mb-2 text-sm text-gray-300">
               Phone Number
             </label>
 
             <input
               type="text"
               required
-              className="w-full border p-3 rounded"
+              className="w-full p-4 rounded-xl bg-black border border-gray-700"
               value={formData.phone}
               onChange={(e) =>
                 setFormData({
@@ -170,17 +170,17 @@ export default function AssessmentPage() {
             />
           </div>
 
-          <hr className="my-8" />
+          <hr className="border-gray-700" />
 
           {questions.map((question, index) => (
             <div key={index}>
-              <label className="block mb-3 font-medium">
+              <label className="block mb-3 text-sm text-gray-300">
                 {question}
               </label>
 
               <select
                 required
-                className="w-full border p-3 rounded"
+                className="w-full p-4 rounded-xl bg-black border border-gray-700"
                 onChange={(e) =>
                   handleAnswerChange(
                     question,
@@ -218,7 +218,7 @@ export default function AssessmentPage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-black text-white px-6 py-3 rounded"
+            className="bg-white text-black px-6 py-4 rounded-xl font-semibold"
           >
             {loading
               ? "Submitting..."
