@@ -1,125 +1,132 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
+import { questions } from "../../../lib/questions";
 
-export default function AssessmentPage({
-  params,
-}: {
-  params: Promise<{ pathway: string }>;
-}) {
-  const [loading, setLoading] = useState(false);
+type Props = {
+  params: {
+    pathway: string;
+  };
+};
 
-  const [form, setForm] = useState({
+export default function AssessmentPage({ params }: Props) {
+  const pathwayQuestions =
+    questions[params.pathway as keyof typeof questions] || [];
+
+  const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
   });
 
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ) {
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+
+  const handleAnswerChange = (
+    question: string,
+    value: string
+  ) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [question]: value,
+    }));
+  };
+
+  const handleSubmit = async (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
 
-    setLoading(true);
-
-    const { pathway } = await params;
+    const payload = {
+      ...formData,
+      pathway: params.pathway,
+      responses: answers,
+    };
 
     const response = await fetch("/api/submissions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...form,
-        pathway,
-      }),
+      body: JSON.stringify(payload),
     });
 
-    const data = await response.json();
-
-    setLoading(false);
-
-    if (data.success) {
+    if (response.ok) {
       alert("Assessment submitted successfully");
     } else {
-      alert("Something went wrong");
+      alert("Submission failed");
     }
-  }
+  };
 
   return (
-    <main className="min-h-screen bg-[#050816] text-white px-6 py-20">
+    <main className="min-h-screen bg-black text-white p-10">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold mb-6">
-          Assessment Intake
+        <h1 className="text-4xl font-bold mb-8 capitalize">
+          {params.pathway.replace(/-/g, " ")} Assessment
         </h1>
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-6 bg-[#111827] p-8 rounded-2xl border border-gray-800"
+          className="space-y-6"
         >
-          <div>
-            <label className="block mb-2 text-sm text-gray-300">
-              Full Name
-            </label>
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="w-full p-4 rounded bg-zinc-900 border border-zinc-700"
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                fullName: e.target.value,
+              })
+            }
+          />
 
-            <input
-              required
-              type="text"
-              value={form.fullName}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  fullName: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-xl bg-black border border-gray-700"
-            />
-          </div>
+          <input
+            type="email"
+            placeholder="Email Address"
+            className="w-full p-4 rounded bg-zinc-900 border border-zinc-700"
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                email: e.target.value,
+              })
+            }
+          />
 
-          <div>
-            <label className="block mb-2 text-sm text-gray-300">
-              Email Address
-            </label>
+          <input
+            type="text"
+            placeholder="Phone Number"
+            className="w-full p-4 rounded bg-zinc-900 border border-zinc-700"
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                phone: e.target.value,
+              })
+            }
+          />
 
-            <input
-              required
-              type="email"
-              value={form.email}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  email: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-xl bg-black border border-gray-700"
-            />
-          </div>
+          {pathwayQuestions.map((question, index) => (
+            <div key={index}>
+              <label className="block mb-2 text-lg">
+                {question}
+              </label>
 
-          <div>
-            <label className="block mb-2 text-sm text-gray-300">
-              Phone Number
-            </label>
-
-            <input
-              required
-              type="text"
-              value={form.phone}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  phone: e.target.value,
-                })
-              }
-              className="w-full p-4 rounded-xl bg-black border border-gray-700"
-            />
-          </div>
+              <textarea
+                className="w-full p-4 rounded bg-zinc-900 border border-zinc-700 min-h-[120px]"
+                onChange={(e) =>
+                  handleAnswerChange(
+                    question,
+                    e.target.value
+                  )
+                }
+              />
+            </div>
+          ))}
 
           <button
             type="submit"
-            disabled={loading}
-            className="bg-white text-black px-6 py-4 rounded-xl font-semibold"
+            className="bg-white text-black px-6 py-4 rounded font-semibold"
           >
-            {loading ? "Submitting..." : "Submit Assessment"}
+            Submit Assessment
           </button>
         </form>
       </div>
