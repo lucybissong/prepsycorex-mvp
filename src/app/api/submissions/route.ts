@@ -11,7 +11,7 @@ export async function POST(req: Request) {
         email: body.email,
         phone: body.phone,
         pathway: body.pathway,
-        status: "pending",
+        responses: body.responses,
       },
     });
 
@@ -25,6 +25,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         success: false,
+        error: "Failed to save submission",
       },
       {
         status: 500,
