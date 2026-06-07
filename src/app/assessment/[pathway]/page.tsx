@@ -1,17 +1,17 @@
 import React from "react";
 
-type Props = {
-  params: {
-    pathway: string;
-  };
-};
+export default async function AssessmentPage({
+  params,
+}: {
+  params: Promise<{ pathway: string }>;
+}) {
+  const { pathway } = await params;
 
-export default function AssessmentPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-[#050816] text-white px-6 py-20">
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-6">
-          {params.pathway.replaceAll("-", " ")}
+          {pathway.replaceAll("-", " ")}
         </h1>
 
         <form className="space-y-6 bg-[#111827] p-8 rounded-2xl border border-gray-800">
